@@ -14,4 +14,5 @@ server.use(express.json());
 
 
 
-server.listen(process.env.PORT, () => console.log(`API Conectada na Porta ${process.env.PORT}`))
+server.listen(process.env.PORT, 
+    () => console.log(`API Conectada na Porta ${process.env.PORT}`))
