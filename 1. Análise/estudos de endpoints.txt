@@ -8,7 +8,7 @@
     "senha": ""
     }
 
-    response
+    response (200)
     {
         "id": 0,
         "email": "",
