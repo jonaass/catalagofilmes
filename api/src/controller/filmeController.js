@@ -1,5 +1,5 @@
 
-import { alterarImagem, buscarPorId, buscarPorNome, inserirFilme, listarTodosFilmes, removerFilme } from '../repository/filmeRepository.js'
+import { alterarFilme, alterarImagem, buscarPorId, buscarPorNome, inserirFilme, listarTodosFilmes, removerFilme } from '../repository/filmeRepository.js'
 
 import multer from 'multer'
 import { Router } from 'express'
@@ -10,35 +10,35 @@ const upload = multer({ dest: 'storage/capasFilmes' })
 
 server.post('/filme', async (req, resp) =>{
     try {
-        const novoFilme = req.body;
+        const filme = req.body;
 
 
-        if (!novoFilme.nome) {
+        if (!filme.nome) {
             throw new Error('Nome do filme é obrigatorio!');
         }
 
-        if (!novoFilme.sinopse) {
+        if (!filme.sinopse) {
             throw new Error('Sinopse do filme é obrigatorio!');
         }
 
-        if(novoFilme.avaliacao == undefined || novoFilme.avaliacao < 0){
+        if(filme.avaliacao == undefined || filme.avaliacao < 0){
           throw new Error ('Avaliação do filme é obrigatorio!')
         }
 
-        if (!novoFilme.lancamento) {
+        if (!filme.lancamento) {
             throw new Error('Lancamento do filme é obrigatorio!');
         }
 
-        if (!novoFilme.disponivel) {
+        if (filme.disponivel == undefined) {
             throw new Error('Campo Disponivel é obrigatorio!');
         }
 
-        if (!novoFilme.usuario) {
+        if (!filme.usuario) {
             throw new Error('Usuário não logado!');
         }
         
 
-       const filmeInserir = await inserirFilme(novoFilme);
+       const filmeInserir = await inserirFilme(filme);
 
        resp.send(filmeInserir)
     } 
@@ -129,6 +129,52 @@ server.delete('/filmes/:id', async (req, resp) => {
         }
 
         resp.status(204).send();
+    } 
+    catch (err) {
+        resp.status(400).send({
+            erro: err.message 
+        })
+    }
+})
+
+server.put('/filmes/:id', async (req,resp) => {
+    try {
+        const { id } = req.params;
+        const filme = req.body;
+
+        if (!filme.nome) {
+            throw new Error('Nome do filme é obrigatorio!');
+        }
+
+        if (!filme.sinopse) {
+            throw new Error('Sinopse do filme é obrigatorio!');
+        }
+
+        if(filme.avaliacao == undefined || filme.avaliacao < 0){
+          throw new Error ('Avaliação do filme é obrigatorio!')
+        }
+
+        if (!filme.lancamento) {
+            throw new Error('Lancamento do filme é obrigatorio!');
+        }
+
+        if (filme.disponivel == undefined) {
+            throw new Error('Campo Disponivel é obrigatorio!');
+        }
+
+        if (!filme.usuario) {
+            throw new Error('Usuário não logado!');
+        }
+        
+
+        const resposta = await alterarFilme(id, filme);
+        if (resposta != 1) {
+            throw new Error ('BURRO PARACE UMA MULA');
+            
+        }
+        else{
+            resp.status(205).send();
+        }
     } 
     catch (err) {
         resp.status(400).send({

@@ -76,7 +76,6 @@ request body
  "avalicao": 0.0,
  "lancamento": "2020-10-00",
  "disponivel": true,
- "imagem": 0,
  "usuario": 0
 }
 
