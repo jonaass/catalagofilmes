@@ -75,3 +75,13 @@ WHERE nm_filme			     like ?`
   return linhas;
   
 }
+
+export async function removerFilme(id) {
+  const comando =
+  `
+  DELETE FROM tb_filme
+  WHERE id_filme = ?`;
+
+  const [resposta] = await con.query(comando,[id]);
+  return resposta.affectedRows
+}

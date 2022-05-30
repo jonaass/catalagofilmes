@@ -1,5 +1,5 @@
 
-import { alterarImagem, buscarPorId, buscarPorNome, inserirFilme, listarTodosFilmes } from '../repository/filmeRepository.js'
+import { alterarImagem, buscarPorId, buscarPorNome, inserirFilme, listarTodosFilmes, removerFilme } from '../repository/filmeRepository.js'
 
 import multer from 'multer'
 import { Router } from 'express'
@@ -49,7 +49,7 @@ server.post('/filme', async (req, resp) =>{
     }
 })
 
-server.put('/filme/:id/capa', upload.single('capa') , async (req, resp) => {
+server.put('/filmes/:id/capa', upload.single('capa') , async (req, resp) => {
     try {
         const { id } = req.params;
         const imagem = req.file.path;
@@ -118,6 +118,24 @@ server.get('/filmes/:id', async (req, resp) => {
     }
 })
 
+server.delete('/filmes/:id', async (req, resp) => {
+    try {
+        const { id } =req.params;
+
+        const resposta = await removerFilme(id);
+
+        if (resposta != 1) {
+            throw new Error ('ERRO SEU BURRÃO DO CACETE')
+        }
+
+        resp.status(204).send();
+    } 
+    catch (err) {
+        resp.status(400).send({
+            erro: err.message 
+        })
+    }
+})
 
 
 export default server;
